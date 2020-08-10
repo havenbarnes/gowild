@@ -1,2 +1,3 @@
 #!/bin/bash
-echo YOLO
+echo HELLO
+go build

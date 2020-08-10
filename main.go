@@ -75,7 +75,7 @@ func getBashHistory() string {
 		index := historyLen - 1 - i
 		cmd := fullHistory[index]
 		fullHistory[index] = strings.Join(strings.Split(fullHistory[index], ";")[1:], "")
-		if strings.Contains(cmd, "go run main.go record") {
+		if strings.Contains(cmd, "go run main.go record") || strings.Contains(cmd, "gowild record") {
 			lastIndex = index
 			break
 		}
@@ -123,13 +123,13 @@ func execStop() {
 		return
 	}
 
-	setRecording(false)
 	writeFile()
 	deleteConfig()
+	fmt.Println("Recorded commands written to shell script output.sh")
 }
 
 func writeFile() {
-	path := filepath.Join(getCwd(), "gowild.sh")
+	path := filepath.Join(getCwd(), "output.sh")
 	f, err := os.Create(path)
 	check(err)
 	_, err = f.WriteString("#!/bin/bash\n" + getBashHistory())
