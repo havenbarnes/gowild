@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bufio"
 	"fmt"
 	"io/ioutil"
 	"os"
@@ -8,7 +9,7 @@ import (
 	"strings"
 )
 
-const activeRecordingFlag = "gowild_recording_flag"
+const gowildVersion = "0.0.1"
 
 func check(e error) {
 	if e != nil {
@@ -16,17 +17,20 @@ func check(e error) {
 	}
 }
 
-func printHelp(cmd string) {
-	fmt.Printf(`gowild - https://github.com/havenbarnes/gowild
+func printVersion() {
+	fmt.Printf("gowild - https://github.com/havenbarnes/gowild\nv%v\n", gowildVersion)
+}
 
-Invalid command: %v
-
-Usage:
-  gowild start          begin recording bash commands
+func printHelp(cmd string, invalidCommand bool) {
+	fmt.Print("gowild - https://github.com/havenbarnes/gowild\n\n")
+	if invalidCommand {
+		fmt.Printf("Invalid command: %s\n\n", cmd)
+	}
+	fmt.Print(`Usage:
+  gowild record         begin recording bash commands
   gowild stop           end recording session and create shell script
   gowild help           Print Help (this message) and exit
-  gowild version        Print version information and exit
-	`, cmd)
+  gowild version        Print version information and exit`)
 }
 
 var cwd string
@@ -54,14 +58,6 @@ func getHistoryPath() string {
 		return filepath.Join(home, ".bash_history")
 	}
 	return filepath.Join(home, ".zsh_history")
-}
-
-func reverse(strings []string) []string {
-	for i := 0; i < len(strings)/2; i++ {
-		j := len(strings) - i - 1
-		strings[i], strings[j] = strings[j], strings[i]
-	}
-	return strings
 }
 
 func getBashHistory() string {
@@ -125,11 +121,11 @@ func execStop() {
 
 	writeFile()
 	deleteConfig()
-	fmt.Println("Recorded commands written to shell script output.sh")
 }
 
 func writeFile() {
-	path := filepath.Join(getCwd(), "output.sh")
+	filename := getOutputFilename()
+	path := filepath.Join(getCwd(), filename)
 	f, err := os.Create(path)
 	check(err)
 	_, err = f.WriteString("#!/bin/bash\n" + getBashHistory())
@@ -138,6 +134,25 @@ func writeFile() {
 
 	err = os.Chmod(path, 0777)
 	check(err)
+	fmt.Printf("Recorded commands written to shell script %s\n", filename)
+}
+
+func getOutputFilename() string {
+	defaultName := "gowild.sh"
+	scanner := bufio.NewScanner(os.Stdin)
+	fmt.Printf("What should the output file be named? [%s]: ", defaultName)
+	scanner.Scan()
+	filename := scanner.Text()
+	check(scanner.Err())
+
+	if strings.TrimSpace(filename) == "" {
+		filename = defaultName
+	}
+	if filename[len(filename)-3:] == ".sh" {
+		return filename
+	}
+	filename = filename + ".sh"
+	return filename
 }
 
 func testToggle() string {
@@ -149,18 +164,24 @@ func testToggle() string {
 
 func main() {
 	var cmd string
-	if len(os.Args) != 2 {
-		printHelp("No command specified.")
+	if len(os.Args) < 2 {
+		printHelp("No command specified.", true)
 		return
-	} else {
-		cmd = os.Args[1]
+	} else if len(os.Args) > 2 {
+		printHelp("Too many arguments provided.", true)
+		return
 	}
+	cmd = os.Args[1]
 
 	if cmd == "record" {
 		execRecord()
 	} else if cmd == "stop" {
 		execStop()
+	} else if cmd == "help" {
+		printHelp("", false)
+	} else if cmd == "version" {
+		printVersion()
 	} else {
-		printHelp(cmd)
+		printHelp(cmd, true)
 	}
 }
