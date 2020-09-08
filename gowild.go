@@ -17,11 +17,13 @@ func check(e error) {
 	}
 }
 
-func printVersion() {
+// PrintVersion prints CLI Information
+func PrintVersion() {
 	fmt.Printf("gowild - https://github.com/havenbarnes/gowild\nv%v\n", gowildVersion)
 }
 
-func printHelp(cmd string, invalidCommand bool) {
+// PrintHelp prints an optional error message and usage information
+func PrintHelp(cmd string, invalidCommand bool) {
 	fmt.Print("gowild - https://github.com/havenbarnes/gowild\n\n")
 	if invalidCommand {
 		fmt.Printf("Invalid command: %s\n\n", cmd)
@@ -104,7 +106,8 @@ func setRecording(recording bool) {
 	defer f.Close()
 }
 
-func execRecord() {
+// ExecRecord begins a recording session by writing a flag file.
+func ExecRecord() {
 	if isRecording() {
 		fmt.Println("Existing recording session found. Starting new recording session from here. Run 'gowild stop' to end recording")
 	} else {
@@ -113,7 +116,8 @@ func execRecord() {
 	setRecording(true)
 }
 
-func execStop() {
+// ExecStop ends a recording session by accessing bash history, writing an output file, and deleting the flag file.
+func ExecStop() {
 	if !isRecording() {
 		fmt.Println("No recording session found. Run 'gowild record' to begin recording commands.")
 		return
@@ -165,23 +169,23 @@ func testToggle() string {
 func main() {
 	var cmd string
 	if len(os.Args) < 2 {
-		printHelp("No command specified.", true)
+		PrintHelp("No command specified.", true)
 		return
 	} else if len(os.Args) > 2 {
-		printHelp("Too many arguments provided.", true)
+		PrintHelp("Too many arguments provided.", true)
 		return
 	}
 	cmd = os.Args[1]
 
 	if cmd == "record" {
-		execRecord()
+		ExecRecord()
 	} else if cmd == "stop" {
-		execStop()
+		ExecStop()
 	} else if cmd == "help" {
-		printHelp("", false)
+		PrintHelp("", false)
 	} else if cmd == "version" {
-		printVersion()
+		PrintVersion()
 	} else {
-		printHelp(cmd, true)
+		PrintHelp(cmd, true)
 	}
 }
