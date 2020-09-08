@@ -24,6 +24,12 @@ $ ./helloworld.sh
 Hello, World!
 ```
 
+## FAQ
+
+### What if I use Zsh instead of Bash?
+
+Zsh is also supported! Fish is not yet supported, but planned.
+
 ## License
 
 [ISC](LICENSE)
