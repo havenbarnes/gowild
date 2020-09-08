@@ -47,7 +47,7 @@ func getCwd() string {
 }
 
 func getConfigPath() string {
-	return filepath.Join(getCwd(), ".gowild")
+	return "/usr/local/bin/.gowild"
 }
 
 func deleteConfig() {
@@ -73,7 +73,7 @@ func getBashHistory() string {
 		index := historyLen - 1 - i
 		cmd := fullHistory[index]
 		fullHistory[index] = strings.Join(strings.Split(fullHistory[index], ";")[1:], "")
-		if strings.Contains(cmd, "go run main.go record") || strings.Contains(cmd, "gowild record") {
+		if strings.Contains(cmd, "gowild record") {
 			lastIndex = index
 			break
 		}
@@ -111,7 +111,7 @@ func ExecRecord() {
 	if isRecording() {
 		fmt.Println("Existing recording session found. Starting new recording session from here. Run 'gowild stop' to end recording")
 	} else {
-		fmt.Println("Now recording commands... run 'gowild stop' to end recording")
+		fmt.Println("Now recording commands... run 'gowild stop' to end recording.\nTo start over, just run 'gowild record' again.")
 	}
 	setRecording(true)
 }
@@ -138,7 +138,7 @@ func writeFile() {
 
 	err = os.Chmod(path, 0777)
 	check(err)
-	fmt.Printf("Recorded commands written to shell script %s\n", filename)
+	fmt.Printf("Recorded commands written to shell script %s\n", filepath.Join(getCwd(), filename))
 }
 
 func getOutputFilename() string {
