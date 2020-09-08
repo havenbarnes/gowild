@@ -2,7 +2,7 @@
 
 #### A simple CLI for recording terminal commands in a shell script
 
-![badge](https://github.com/havenbarnes/gowild/workflows/Go%20CI/badge.svg)
+![Go CI](https://github.com/havenbarnes/gowild/workflows/Go%20CI/badge.svg)
 
 ## Installing
 
