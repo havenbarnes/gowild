@@ -6,7 +6,7 @@
 
 ## Installing
 
-First, download the appropriate binary at github.com/havenbarnes/gowild/releases. If you're using macOS, you want the Darwin distribution.
+First, download the appropriate binary at [github.com/havenbarnes/gowild/releases](github.com/havenbarnes/gowild/releases). If you're using macOS, you want the Darwin distribution.
 
 Then, unzip the package and run the following commands:
 
