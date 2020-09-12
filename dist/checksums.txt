@@ -1,0 +1,5 @@
+07d39d22c48a452c19ed2b70e980c50d4d1e971c408040463e4d971960de1378  gowild_v0.0.0-next_Linux_i386.tar.gz
+18f704dba6e98bd41e32f68e004bc1fee4ba40abce37b8497dd50b410872912d  gowild_v0.0.0-next_Linux_x86_64.tar.gz
+2dae60317192b7f56010c5efa65ac02ea6a03ad4e9cbecbbdd85741e69c58cb4  gowild_v0.0.0-next_Windows_x86_64.tar.gz
+36e73297a9cb89264c07fafa774da9ff2f2a158cffee5306715c36bf81ef179e  gowild_v0.0.0-next_Darwin_x86_64.tar.gz
+501d232dcfd910915c3f876f4bed10df988a6d2c996375888748865b09335ed8  gowild_v0.0.0-next_Windows_i386.tar.gz
